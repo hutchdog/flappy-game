@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 public class FullscreenActivity extends AppCompatActivity {
 
-    GameView m_gameView;
+    private GameView m_gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +18,9 @@ public class FullscreenActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        m_gameView = new GameView(this);
-        setContentView(m_gameView);
+        setContentView(R.layout.activity_fullscreen);
+        m_gameView = findViewById(R.id.gameView);
+        m_gameView.init();
     }
 
     @Override

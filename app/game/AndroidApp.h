@@ -12,5 +12,12 @@ namespace core {
         void Pause() override;
         void Resume() override;
         void Draw() override;
+
+        void NativeInit(JNIEnv *env, jobject, jobject);
+
+    private:
+        JNIEnv* m_environment   = nullptr;
+        jobject m_context       = nullptr;
+        jobject m_nativeView    = nullptr;
     };
 }

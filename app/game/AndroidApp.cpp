@@ -25,11 +25,17 @@ AndroidApp::AndroidApp() {
 }
 
 AndroidApp::~AndroidApp() {
-
+    //TODO: release refs
 }
 
 void AndroidApp::Init() {
 
+}
+
+void AndroidApp::NativeInit(JNIEnv *env, jobject context, jobject view) {
+    m_environment = env;
+    m_context = env->NewGlobalRef(context);
+    m_nativeView = env->NewGlobalRef(view);
 }
 
 void AndroidApp::Pause() {
@@ -47,9 +53,11 @@ void AndroidApp::Draw() {
 extern "C" {
 
 JNIEXPORT void JNICALL
-Java_com_example_angrygeom_GameView_applicationInit(JNIEnv *env, jobject thiz) {
+Java_com_example_angrygeom_GameView_applicationInit(JNIEnv *env, jobject thiz, jobject context, jobject view) {
     Instantiate();
     Application()->Init();
+    AndroidApp* nativeApp = dynamic_cast<AndroidApp*>(Application());
+    nativeApp->NativeInit(env, context, view);
 }
 
 JNIEXPORT void JNICALL

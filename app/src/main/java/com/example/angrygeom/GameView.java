@@ -1,6 +1,7 @@
 package com.example.angrygeom;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.opengl.GLSurfaceView;
 
 public class GameView extends GLSurfaceView  {
@@ -17,8 +18,30 @@ public class GameView extends GLSurfaceView  {
         setEGLContextClientVersion(2);
         setRenderer(m_openGLRenderer);
 
-        test();
+        applicationInit();
     }
 
-    public native int test();
+    @Override
+    public void onPause() {
+        super.onPause();
+        applicationPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        applicationResume();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        applicationDraw();
+    }
+
+    public native void applicationInit();
+    public native void applicationPause();
+    public native void applicationResume();
+    public native void applicationDraw();
+
 }

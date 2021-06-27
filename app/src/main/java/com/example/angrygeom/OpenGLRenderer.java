@@ -27,6 +27,7 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 arg0, EGLConfig arg1) {
         glClearColor(0f, 1f, 0f, 1f);
+
     }
 
 }

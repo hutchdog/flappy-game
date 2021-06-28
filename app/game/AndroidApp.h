@@ -19,5 +19,8 @@ namespace core {
         JNIEnv* m_environment   = nullptr;
         jobject m_context       = nullptr;
         jobject m_nativeView    = nullptr;
+
+        EGLDisplay m_display;
+        EGLSurface m_surface;
     };
 }

@@ -1,7 +1,6 @@
 package com.example.angrygeom;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -15,6 +14,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private boolean m_nativeStarted = false;
+
+    private Runnable m_updateTicker = new Runnable() {
+        public void run() {
+            update();
+            postDelayed(m_updateTicker, 16);
+        }
+    };
 
     public GameView(Context context) {
         super(context);
@@ -30,6 +36,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
+    public void update() {
+        //Draw test
+        if (m_nativeStarted) {
+            applicationDraw();
+        }
+    }
+
     public void onPause() {
         if (m_nativeStarted) {
             applicationPause();
@@ -43,17 +56,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        if (m_nativeStarted) {
-            applicationDraw();
-        }
-    }
-
-    @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         if (surfaceHolder.getSurface().isValid()) {
             applicationInit(getContext().getApplicationContext(), surfaceHolder.getSurface());
+            post(m_updateTicker);
+
             m_nativeStarted = true;
         }
     }

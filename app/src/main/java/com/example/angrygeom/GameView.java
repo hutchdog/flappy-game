@@ -14,6 +14,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         System.loadLibrary("game");
     }
 
+    private boolean m_nativeStarted = false;
+
     public GameView(Context context) {
         super(context);
         getHolder().addCallback(this);
@@ -24,24 +26,35 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
     }
 
+    public void init() {
+
+    }
+
     public void onPause() {
-        applicationPause();
+        if (m_nativeStarted) {
+            applicationPause();
+        }
     }
 
     public void onResume() {
-        applicationResume();
+        if (m_nativeStarted) {
+            applicationResume();
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        applicationDraw();
+        if (m_nativeStarted) {
+            applicationDraw();
+        }
     }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         if (surfaceHolder.getSurface().isValid()) {
             applicationInit(getContext().getApplicationContext(), surfaceHolder.getSurface());
+            m_nativeStarted = true;
         }
     }
 

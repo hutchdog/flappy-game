@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace gameplay {
     class Level {
     public:
@@ -7,5 +9,8 @@ namespace gameplay {
         ~Level() {};
 
         void Update(float dt) {};
+
+    private:
+        //std::vector<gameplay::Block>
     };
 }

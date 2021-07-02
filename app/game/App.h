@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Player.h"
+
 namespace core {
     class Renderer;
 
@@ -14,6 +16,8 @@ namespace core {
         virtual void Draw() = 0;
 
     protected:
+        gameplay::Player m_player;
+
         void Update();
     };
 }

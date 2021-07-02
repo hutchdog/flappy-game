@@ -15,5 +15,5 @@ App::~App() {
 }
 
 void App::Update() {
-
+    m_player.Update(0);
 }

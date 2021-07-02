@@ -8,6 +8,6 @@ namespace core {
         Renderer() = default;
         virtual ~Renderer() = default;
 
-        virtual void Render(Mesh* mesh) = 0;
+        virtual void Render(const Mesh& mesh) = 0;
     };
 }

@@ -15,7 +15,7 @@ namespace core {
         AndroidRenderer(JNIEnv* environment, jobject context, jobject view);
         ~AndroidRenderer() override;
 
-        void Render(Mesh* mesh) override;
+        void Render(const Mesh& mesh) override;
     private:
         JNIEnv* m_environment   = nullptr;
         jobject m_context       = nullptr;

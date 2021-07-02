@@ -24,15 +24,15 @@ namespace core {
         }
         virtual ~Mesh() = default;
 
-        virtual float* GetVertexData() = 0;
-        virtual float* GetColorData() = 0;
-        virtual int GetVertexCount() = 0;
+        virtual const float* GetVertexData() const = 0;
+        virtual const float* GetColorData() const = 0;
+        virtual const int GetVertexCount() const = 0;
 
         void SetPos(const Vec2& pos) {
             m_pos = pos;
         }
 
-        Vec2 GetPos() {
+        Vec2 GetPos() const {
             return m_pos;
         }
 
@@ -64,15 +64,15 @@ namespace core {
             };
         }
 
-        float* GetVertexData() {
+        const float* GetVertexData() const {
             return m_vertexData.data();
         };
 
-        float* GetColorData() {
+        const float* GetColorData() const {
             return m_ColorData.data();
         }
 
-        int GetVertexCount() {
+        const int GetVertexCount() const {
             return 6;
         };
 
@@ -124,15 +124,15 @@ namespace core {
             }
         }
 
-        float* GetVertexData() {
+        const float* GetVertexData() const {
             return m_vertexData.data();
         };
 
-        float* GetColorData() {
+        const float* GetColorData() const {
             return m_ColorData.data();
         }
 
-        int GetVertexCount() {
+        const int GetVertexCount() const {
             return m_vertexData.size() / 3;
         };
 

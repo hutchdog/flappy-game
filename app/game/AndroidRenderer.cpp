@@ -164,24 +164,21 @@ void AndroidRenderer::CreateProgram() {
     glUseProgram(m_program);
 }
 
-void AndroidRenderer::Render(Mesh* mesh) {
-    if (!mesh)
-        return;
-
+void AndroidRenderer::Render(const Mesh& mesh) {
     glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glVertexAttribPointer(m_posAttribute, 3, GL_FLOAT, false,
-                          0, mesh->GetVertexData());
+                          0, mesh.GetVertexData());
 
     glEnableVertexAttribArray(m_posAttribute);
 
     glVertexAttribPointer(m_colorAttribute, 4, GL_FLOAT, false,
-                          0, mesh->GetColorData());
+                          0, mesh.GetColorData());
 
     glEnableVertexAttribArray(m_colorAttribute);
 
-    auto pos = mesh->GetPos();
+    auto pos = mesh.GetPos();
     float modelMatrix[] = {
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -192,7 +189,7 @@ void AndroidRenderer::Render(Mesh* mesh) {
     glUniformMatrix4fv(m_modelMatrixAttribute, 1, false, modelMatrix);
     glUniformMatrix4fv(m_viewMatrixAttribute, 1, false, projectionMatrix);
 
-    glDrawArrays(GL_TRIANGLES, 0, mesh->GetVertexCount());
+    glDrawArrays(GL_TRIANGLES, 0, mesh.GetVertexCount());
 
     eglSwapBuffers(m_display, m_surface);
 }

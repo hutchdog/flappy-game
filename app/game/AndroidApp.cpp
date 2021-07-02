@@ -47,7 +47,7 @@ void AndroidApp::Draw() {
     Update();
     if (m_androidRenderer) {
         //core::QuadMesh testMesh(0, 0, 10, 10);
-        core::CircleMesh testMesh(0, 0, 1, 20);
+        core::CircleMesh testMesh(0, 0, 100, 20);
         m_androidRenderer->Render(&testMesh);
     }
 }

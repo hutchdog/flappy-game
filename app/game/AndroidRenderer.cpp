@@ -8,11 +8,11 @@
 using core::AndroidRenderer;
 
 namespace {
-    float identityMatrix[] = {
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1,
+    float projectionMatrix[] = {
+            2.f / 1080, 0,          0, 0,
+            0,          2.f / 1920, 0, 0,
+            0,          0,          1, 0,
+            0,          0,          0, 1,
     };
 }
 
@@ -175,7 +175,7 @@ void AndroidRenderer::Render(Mesh* mesh) {
                           0, mesh->GetColorData());
 
     glEnableVertexAttribArray(m_colorAttribute);
-    glUniformMatrix4fv(m_matrixAttribute, 1, false, identityMatrix);
+    glUniformMatrix4fv(m_matrixAttribute, 1, false, projectionMatrix);
 
     glDrawArrays(GL_TRIANGLES, 0, mesh->GetVertexCount());
 

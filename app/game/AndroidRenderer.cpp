@@ -2,17 +2,45 @@
 
 #include <android/native_window_jni.h>
 
+#include <string>
+
 using core::AndroidRenderer;
 
+namespace {
+    float triangleVertexData[] = {
+            // X, Y, Z,
+            -0.4, -0.4, 0,
+            0, 0.4, 0,
+            0.4, -0.4, 0,
+    };
+
+    float triangleColorData[] = {
+            // R, G, B, A
+            1.0f, 1.0f, 1.0f, 1.0f,
+            0.8f, 0.8f, 1.0f, 1.0f,
+            0.8f, 0.8f, 1.0f, 1.0f
+    };
+
+    float identityMatrix[] = {
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1,
+    };
+}
+
 AndroidRenderer::AndroidRenderer(JNIEnv* environment, jobject context, jobject view) : m_environment(environment), m_context(context), m_view(view) {
-    Init();
+    DisplayInit();
+    CreateVS();
+    CreatePS();
+    CreateProgram();
 }
 
 AndroidRenderer::~AndroidRenderer() {
     //TODO: release refs
 }
 
-void AndroidRenderer::Init() {
+void AndroidRenderer::DisplayInit() {
     m_display = eglGetDisplay( EGL_DEFAULT_DISPLAY);
     if (m_display == EGL_NO_DISPLAY)
         return;
@@ -50,10 +78,113 @@ void AndroidRenderer::Init() {
     // Make the context and surface current
     if (!eglMakeCurrent(m_display, m_surface, m_surface, eglContext))
         return;
+
+    glViewport(0, 0, 100, 100);
+    glDisable(GL_CULL_FACE);
+}
+
+void AndroidRenderer::CreateVS() {
+    const GLchar* vertexShaderSource[] = {
+        "uniform mat4 u_MVPMatrix;      ",
+
+        "attribute vec4 a_Position;     ",
+        "attribute vec4 a_Color;        ",
+
+        "varying vec4 v_Color;          ",
+
+        "void main()                    ",
+        "{                              ",
+        "   v_Color = a_Color;          ",
+        "   gl_Position = u_MVPMatrix * ",
+        "                 a_Position;   ",
+        "}                              "
+    };
+
+    m_vertexProgram = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(m_vertexProgram, 10, vertexShaderSource, 0);
+    glCompileShader(m_vertexProgram);
+
+    int compileStatus[1];
+    glGetShaderiv(m_vertexProgram, GL_COMPILE_STATUS, compileStatus);
+
+    if (compileStatus[0] == 0)
+    {
+        glDeleteShader(m_vertexProgram);
+        m_vertexProgram = 0;
+    }
+}
+
+void AndroidRenderer::CreatePS() {
+    const GLchar* fragmentShaderSource[] = {
+        "precision mediump float;       ",
+
+        "varying vec4 v_Color;          ",
+
+        "void main()                    ",
+        "{                              ",
+        "   gl_FragColor = v_Color;     ",
+        "}                              "
+    };
+
+    m_fragmentProgram = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(m_fragmentProgram, 6, fragmentShaderSource, 0);
+    glCompileShader(m_fragmentProgram);
+
+    int compileStatus[1];
+    glGetShaderiv(m_fragmentProgram, GL_COMPILE_STATUS, compileStatus);
+
+    if (compileStatus[0] == 0)
+    {
+        glDeleteShader(m_fragmentProgram);
+        m_fragmentProgram = 0;
+    }
+}
+
+void AndroidRenderer::CreateProgram() {
+    m_program = glCreateProgram();
+
+    if (m_program != 0)
+    {
+        glAttachShader(m_program, m_vertexProgram);
+        glAttachShader(m_program, m_fragmentProgram);
+
+        glLinkProgram(m_program);
+
+        // Get the link status.
+        int linkStatus[1];
+        glGetProgramiv(m_program, GL_LINK_STATUS, linkStatus);
+
+        // If the link failed, delete the program.
+        if (linkStatus[0] == 0)
+        {
+            glDeleteProgram(m_program);
+            m_program = 0;
+        }
+    }
+
+    m_matrixAttribute = glGetUniformLocation(m_program, "u_MVPMatrix");
+    m_posAttribute = glGetAttribLocation(m_program, "a_Position");
+    m_colorAttribute = glGetAttribLocation(m_program, "a_Color");
+
+    glUseProgram(m_program);
 }
 
 void AndroidRenderer::Render() {
     glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glVertexAttribPointer(m_posAttribute, 3, GL_FLOAT, false,
+                          0, triangleVertexData);
+
+    glEnableVertexAttribArray(m_posAttribute);
+
+    glVertexAttribPointer(m_colorAttribute, 4, GL_FLOAT, false,
+                          0, triangleColorData);
+
+    glEnableVertexAttribArray(m_colorAttribute);
+    glUniformMatrix4fv(m_matrixAttribute, 1, false, identityMatrix);
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
     eglSwapBuffers(m_display, m_surface);
 }

@@ -12,6 +12,9 @@ namespace core {
         virtual void Pause() = 0;
         virtual void Resume() = 0;
         virtual void Draw() = 0;
+
+    protected:
+        void Update();
     };
 }
 

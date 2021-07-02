@@ -43,6 +43,7 @@ void AndroidApp::Resume() {
 }
 
 void AndroidApp::Draw() {
+    Update();
     if (m_androidRenderer)
         m_androidRenderer->Render();
 }

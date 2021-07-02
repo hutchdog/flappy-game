@@ -19,11 +19,22 @@ namespace core {
     private:
         JNIEnv* m_environment   = nullptr;
         jobject m_context       = nullptr;
-        jobject m_view    = nullptr;
+        jobject m_view          = nullptr;
 
         EGLDisplay m_display;
         EGLSurface m_surface;
 
-        void Init();
+        GLint m_vertexProgram       = 0;
+        GLint m_fragmentProgram     = 0;
+        GLint m_program             = 0;
+
+        int m_matrixAttribute       = 0;
+        int m_posAttribute          = 0;
+        int m_colorAttribute        = 0;
+
+        void DisplayInit();
+        void CreateVS();
+        void CreatePS();
+        void CreateProgram();
     };
 }

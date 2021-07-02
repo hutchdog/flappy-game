@@ -14,3 +14,6 @@ App::~App() {
 
 }
 
+void App::Update() {
+
+}

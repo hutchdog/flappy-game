@@ -9,10 +9,10 @@ using core::AndroidRenderer;
 
 namespace {
     float projectionMatrix[] = {
-            2.f / 1080, 0,          0, 0,
-            0,          2.f / 1920, 0, 0,
-            0,          0,          1, 0,
-            0,          0,          0, 1,
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1,
     };
 }
 
@@ -71,11 +71,15 @@ void AndroidRenderer::DisplayInit() {
 
     glViewport(0, 0, windowWidth, windowHeight);
     glDisable(GL_CULL_FACE);
+
+    projectionMatrix[0] = 2.f / windowWidth;
+    projectionMatrix[5] = 2.f / windowHeight;
 }
 
 void AndroidRenderer::CreateVS() {
     const GLchar* vertexShaderSource[] = {
-        "uniform mat4 u_MVPMatrix;      ",
+        "uniform mat4 u_viewProjMatrix; ",
+        "uniform mat4 u_modelMatrix;    ",
 
         "attribute vec4 a_Position;     ",
         "attribute vec4 a_Color;        ",
@@ -85,13 +89,13 @@ void AndroidRenderer::CreateVS() {
         "void main()                    ",
         "{                              ",
         "   v_Color = a_Color;          ",
-        "   gl_Position = u_MVPMatrix * ",
+        "   gl_Position = u_viewProjMatrix * u_modelMatrix *",
         "                 a_Position;   ",
         "}                              "
     };
 
     m_vertexProgram = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(m_vertexProgram, 10, vertexShaderSource, 0);
+    glShaderSource(m_vertexProgram, 11, vertexShaderSource, 0);
     glCompileShader(m_vertexProgram);
 
     int compileStatus[1];
@@ -152,7 +156,8 @@ void AndroidRenderer::CreateProgram() {
         }
     }
 
-    m_matrixAttribute = glGetUniformLocation(m_program, "u_MVPMatrix");
+    m_viewMatrixAttribute = glGetUniformLocation(m_program, "u_viewProjMatrix");
+    m_modelMatrixAttribute = glGetUniformLocation(m_program, "u_modelMatrix");
     m_posAttribute = glGetAttribLocation(m_program, "a_Position");
     m_colorAttribute = glGetAttribLocation(m_program, "a_Color");
 
@@ -175,7 +180,17 @@ void AndroidRenderer::Render(Mesh* mesh) {
                           0, mesh->GetColorData());
 
     glEnableVertexAttribArray(m_colorAttribute);
-    glUniformMatrix4fv(m_matrixAttribute, 1, false, projectionMatrix);
+
+    auto pos = mesh->GetPos();
+    float modelMatrix[] = {
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            pos.m_x, pos.m_y, 0, 1,
+    };
+
+    glUniformMatrix4fv(m_modelMatrixAttribute, 1, false, modelMatrix);
+    glUniformMatrix4fv(m_viewMatrixAttribute, 1, false, projectionMatrix);
 
     glDrawArrays(GL_TRIANGLES, 0, mesh->GetVertexCount());
 

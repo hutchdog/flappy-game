@@ -28,7 +28,8 @@ namespace core {
         GLint m_fragmentProgram     = 0;
         GLint m_program             = 0;
 
-        int m_matrixAttribute       = 0;
+        int m_viewMatrixAttribute   = 0;
+        int m_modelMatrixAttribute  = 0;
         int m_posAttribute          = 0;
         int m_colorAttribute        = 0;
 

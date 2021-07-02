@@ -1,4 +1,5 @@
 #include "AndroidRenderer.h"
+#include "Mesh.h"
 
 #include <android/native_window_jni.h>
 
@@ -7,20 +8,6 @@
 using core::AndroidRenderer;
 
 namespace {
-    float triangleVertexData[] = {
-            // X, Y, Z,
-            -0.4, -0.4, 0,
-            0, 0.4, 0,
-            0.4, -0.4, 0,
-    };
-
-    float triangleColorData[] = {
-            // R, G, B, A
-            1.0f, 1.0f, 1.0f, 1.0f,
-            0.8f, 0.8f, 1.0f, 1.0f,
-            0.8f, 0.8f, 1.0f, 1.0f
-    };
-
     float identityMatrix[] = {
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -79,7 +66,10 @@ void AndroidRenderer::DisplayInit() {
     if (!eglMakeCurrent(m_display, m_surface, m_surface, eglContext))
         return;
 
-    glViewport(0, 0, 100, 100);
+    int windowWidth = ANativeWindow_getWidth(window);
+    int windowHeight = ANativeWindow_getHeight(window);
+
+    glViewport(0, 0, windowWidth, windowHeight);
     glDisable(GL_CULL_FACE);
 }
 
@@ -169,22 +159,25 @@ void AndroidRenderer::CreateProgram() {
     glUseProgram(m_program);
 }
 
-void AndroidRenderer::Render() {
+void AndroidRenderer::Render(Mesh* mesh) {
+    if (!mesh)
+        return;
+
     glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glVertexAttribPointer(m_posAttribute, 3, GL_FLOAT, false,
-                          0, triangleVertexData);
+                          0, mesh->GetVertexData());
 
     glEnableVertexAttribArray(m_posAttribute);
 
     glVertexAttribPointer(m_colorAttribute, 4, GL_FLOAT, false,
-                          0, triangleColorData);
+                          0, mesh->GetColorData());
 
     glEnableVertexAttribArray(m_colorAttribute);
     glUniformMatrix4fv(m_matrixAttribute, 1, false, identityMatrix);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, mesh->GetVertexCount());
 
     eglSwapBuffers(m_display, m_surface);
 }

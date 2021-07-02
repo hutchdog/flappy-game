@@ -2,6 +2,7 @@
 
 #include "AndroidApp.h"
 #include "AndroidRenderer.h"
+#include "Mesh.h"
 
 #include <memory>
 
@@ -44,8 +45,10 @@ void AndroidApp::Resume() {
 
 void AndroidApp::Draw() {
     Update();
-    if (m_androidRenderer)
-        m_androidRenderer->Render();
+    if (m_androidRenderer) {
+        core::QuadMesh testMesh(0, 0, 10, 10);
+        m_androidRenderer->Render(&testMesh);
+    }
 }
 
 extern "C" {

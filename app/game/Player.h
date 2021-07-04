@@ -15,7 +15,11 @@ namespace gameplay {
 
         void Update(float dt) {
             auto currentPos = m_playerMesh.GetPos();
-            currentPos.m_x += 1;
+            currentPos.m_x += 2 * dt;
+
+            m_horizontalSpeed -= 0.05f * dt;
+            currentPos.m_y += m_horizontalSpeed;
+
             m_playerMesh.SetPos(currentPos);
         };
 
@@ -32,5 +36,7 @@ namespace gameplay {
 
     private:
         core::CircleMesh m_playerMesh;
+
+        float m_horizontalSpeed = 0;
     };
 }

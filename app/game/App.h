@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "Level.h"
+#include "Timer.h"
 
 namespace core {
     class Renderer;
@@ -20,6 +21,9 @@ namespace core {
     protected:
         gameplay::Player m_player;
         gameplay::Level m_level;
+        core::Timer m_timer;
+
+        Renderer* m_renderer;
 
         virtual void Update();
     };

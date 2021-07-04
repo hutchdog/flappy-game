@@ -16,8 +16,5 @@ namespace core {
 
     protected:
         void Update() override;
-
-    private:
-        Renderer* m_androidRenderer;
     };
 }

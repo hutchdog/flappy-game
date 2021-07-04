@@ -18,9 +18,6 @@ namespace {
             application.reset(new AndroidApp());
     }
 
-    bool tm_init = false;
-    int64_t previousTime;
-    int64_t currentTime;
 }
 
 core::App *Application() {
@@ -36,7 +33,7 @@ AndroidApp::~AndroidApp() {
 }
 
 void AndroidApp::Init(Renderer* renderer) {
-    m_androidRenderer = renderer;
+    m_renderer = renderer;
 }
 
 void AndroidApp::Pause() {
@@ -49,14 +46,7 @@ void AndroidApp::Resume() {
 
 void AndroidApp::Draw() {
     Update();
-    if (m_androidRenderer) {
-        m_androidRenderer->BeginFrame();
 
-        m_player.Draw(m_androidRenderer);
-        m_level.Draw(m_androidRenderer);
-
-        m_androidRenderer->EndFrame();
-    }
 }
 
 void AndroidApp::Touch() {
@@ -64,27 +54,7 @@ void AndroidApp::Touch() {
 }
 
 void AndroidApp::Update() {
-    auto getTime = []() -> int64_t {
-        struct timespec now;
-        clock_gettime(CLOCK_MONOTONIC, &now);
-        return (int64_t) now.tv_sec*1000000000LL + now.tv_nsec;
-    };
-
-    if(!tm_init) {
-        previousTime = currentTime = getTime();
-        tm_init = true;
-    } else {
-        previousTime = currentTime;
-        currentTime = getTime();
-    }
-
     App::Update();
-    if (m_androidRenderer) {
-
-        auto delta = currentTime - previousTime;
-        auto dt = delta / 1000000000.f;
-        m_androidRenderer->Update(dt);
-    }
 }
 
 extern "C" {

@@ -14,6 +14,9 @@ namespace core {
         void Draw() override;
         void Touch() override;
 
+    protected:
+        void Update() override;
+
     private:
         Renderer* m_androidRenderer;
     };

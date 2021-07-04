@@ -17,6 +17,10 @@ namespace {
         if (application == nullptr)
             application.reset(new AndroidApp());
     }
+
+    bool tm_init = false;
+    int64_t previousTime;
+    int64_t currentTime;
 }
 
 core::App *Application() {
@@ -57,6 +61,30 @@ void AndroidApp::Draw() {
 
 void AndroidApp::Touch() {
     m_player.Touch();
+}
+
+void AndroidApp::Update() {
+    auto getTime = []() -> int64_t {
+        struct timespec now;
+        clock_gettime(CLOCK_MONOTONIC, &now);
+        return (int64_t) now.tv_sec*1000000000LL + now.tv_nsec;
+    };
+
+    if(!tm_init) {
+        previousTime = currentTime = getTime();
+        tm_init = true;
+    } else {
+        previousTime = currentTime;
+        currentTime = getTime();
+    }
+
+    App::Update();
+    if (m_androidRenderer) {
+
+        auto delta = currentTime - previousTime;
+        auto dt = delta / 1000000000.f;
+        m_androidRenderer->Update(dt);
+    }
 }
 
 extern "C" {

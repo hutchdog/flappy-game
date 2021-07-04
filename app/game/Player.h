@@ -8,12 +8,13 @@ namespace gameplay {
     public:
         //TODO: Remove hardcoded constants?
         //TODO: Derive from Renderable?
-        Player() : m_playerMesh(10, 30, 10, 24) {
+        Player() : m_playerMesh(-40, 0, 10, 24) {
 
         };
         ~Player() {};
 
         void Update(float dt) {
+            /*
             auto currentPos = m_playerMesh.GetPos();
             currentPos.m_x += 6 * dt;
 
@@ -21,6 +22,7 @@ namespace gameplay {
             currentPos.m_y += m_horizontalSpeed;
 
             m_playerMesh.SetPos(currentPos);
+             */
         };
 
         void Draw(core::Renderer* renderer) {

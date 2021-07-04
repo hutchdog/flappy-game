@@ -16,6 +16,7 @@ namespace core {
         ~AndroidRenderer() override;
 
         void BeginFrame() override;
+        void Update(float dt) override;
         void Render(const Mesh& mesh) override;
         void EndFrame() override;
 

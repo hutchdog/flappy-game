@@ -14,7 +14,7 @@ Level::~Level() {
 
 void Level::Update(float dt) {
     if (m_blocks.empty()) {
-        m_blocks.emplace_back(Block(50, 0, 10, 50));
+        m_blocks.emplace_back(Block(0, -50, 10, 50));
     }
 }
 

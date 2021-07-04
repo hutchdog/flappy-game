@@ -8,7 +8,7 @@ namespace gameplay {
     public:
         //TODO: Remove hardcoded constants?
         //TODO: Derive from Renderable?
-        Block(float x, float y, float width, float height) : m_blockMesh(0, 0, width, height) {
+        Block(float x, float y, float width, float height) : m_blockMesh(x, y, width, height) {
             m_blockMesh.SetPos(core::Vec2(x, y));
         };
         ~Block() {};

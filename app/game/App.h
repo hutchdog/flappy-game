@@ -21,7 +21,7 @@ namespace core {
         gameplay::Player m_player;
         gameplay::Level m_level;
 
-        void Update();
+        virtual void Update();
     };
 }
 

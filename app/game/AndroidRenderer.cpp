@@ -71,18 +71,14 @@ void AndroidRenderer::DisplayInit() {
 
     glViewport(0, 0, windowWidth, windowHeight);
     glDisable(GL_CULL_FACE);
-    /*
-    projectionMatrix[0] = 2.f / windowWidth;
-    projectionMatrix[5] = 2.f / windowHeight;
-     */
 
     float aspectFix = ((float)windowHeight / (float)windowWidth);
 
     projectionMatrix[0] = 2.f / 100.f * aspectFix;
     projectionMatrix[5] = 2.f / 100.f; //Design height
 
-    projectionMatrix[12] = -1.f;
-    projectionMatrix[13] = -1.f;
+    projectionMatrix[12] = 0.f;
+    projectionMatrix[13] = 0.f;
 }
 
 void AndroidRenderer::CreateVS() {
@@ -176,6 +172,10 @@ void AndroidRenderer::CreateProgram() {
 void AndroidRenderer::BeginFrame() {
     glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void AndroidRenderer::Update(float dt) {
+    //projectionMatrix[12] -= 0.2f * dt;
 }
 
 void AndroidRenderer::Render(const Mesh& mesh) {

@@ -9,6 +9,7 @@ namespace core {
         virtual ~Renderer() = default;
 
         virtual void BeginFrame() = 0;
+        virtual void Update(float dt) = 0;
         virtual void Render(const Mesh& mesh) = 0;
         virtual void EndFrame() = 0;
     };

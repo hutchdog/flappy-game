@@ -15,9 +15,9 @@ namespace gameplay {
 
         void Update(float dt) {
             auto currentPos = m_playerMesh.GetPos();
-            currentPos.m_x += 2 * dt;
+            currentPos.m_x += 6 * dt;
 
-            m_horizontalSpeed -= 0.05f * dt;
+            m_horizontalSpeed -= 0.5f * dt;
             currentPos.m_y += m_horizontalSpeed;
 
             m_playerMesh.SetPos(currentPos);
@@ -32,6 +32,10 @@ namespace gameplay {
 
         const core::Mesh& GetMesh() const {
             return m_playerMesh;
+        }
+
+        void Touch() {
+            m_horizontalSpeed = 0.7f;
         }
 
     private:

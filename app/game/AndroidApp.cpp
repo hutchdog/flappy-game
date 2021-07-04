@@ -55,10 +55,15 @@ void AndroidApp::Draw() {
     }
 }
 
+void AndroidApp::Touch() {
+    m_player.Touch();
+}
+
 extern "C" {
 
 JNIEXPORT void JNICALL
-Java_com_example_angrygeom_GameView_applicationInit(JNIEnv *env, jobject thiz, jobject context, jobject view) {
+Java_com_example_angrygeom_GameView_applicationInit(JNIEnv *env, jobject thiz, jobject context,
+                                                    jobject view) {
     Instantiate();
     Application()->Init(new AndroidRenderer(env, context, view));
 }
@@ -76,6 +81,11 @@ Java_com_example_angrygeom_GameView_applicationResume(JNIEnv *env, jobject thiz)
 JNIEXPORT void JNICALL
 Java_com_example_angrygeom_GameView_applicationDraw(JNIEnv *env, jobject thiz) {
     Application()->Draw();
+}
+
+JNIEXPORT void JNICALL
+Java_com_example_angrygeom_GameView_applicationOnTouch(JNIEnv *env, jobject thiz) {
+    Application()->Touch();
 }
 
 }

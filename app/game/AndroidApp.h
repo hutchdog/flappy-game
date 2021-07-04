@@ -12,6 +12,7 @@ namespace core {
         void Pause() override;
         void Resume() override;
         void Draw() override;
+        void Touch() override;
 
     private:
         Renderer* m_androidRenderer;

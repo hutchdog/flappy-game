@@ -2,13 +2,15 @@ package com.example.angrygeom;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
     static {
         System.loadLibrary("game");
     }
@@ -25,11 +27,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public GameView(Context context) {
         super(context);
         getHolder().addCallback(this);
+        setOnTouchListener(this);
     }
 
     public GameView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         getHolder().addCallback(this);
+        setOnTouchListener(this);
     }
 
     public void init() {
@@ -79,6 +83,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        applicationOnTouch();
+        return true;
+    }
+
     public native void applicationInit(Context context, Surface surface);
 
     public native void applicationPause();
@@ -87,4 +97,5 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public native void applicationDraw();
 
+    public native void applicationOnTouch();
 }

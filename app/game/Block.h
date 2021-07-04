@@ -8,23 +8,14 @@ namespace gameplay {
     public:
         //TODO: Remove hardcoded constants?
         //TODO: Derive from Renderable?
-        Block(float x, float y, float width, float height) : m_blockMesh(x, y, width, height) {
-            m_blockMesh.SetPos(core::Vec2(x, y));
-        };
-        ~Block() {};
+        Block(float x, float y, float width, float height);
+        ~Block();
 
-        void Update(float dt) {};
+        void Update(float dt);
 
-        void Draw(core::Renderer* renderer) {
-            if (!renderer)
-                return;
+        void Draw(core::Renderer* renderer);
 
-            renderer->Render(m_blockMesh);
-        }
-
-        const core::Mesh& GetMesh() const {
-            return m_blockMesh;
-        }
+        const core::Mesh& GetMesh() const;
 
     private:
         core::QuadMesh m_blockMesh;

@@ -42,7 +42,7 @@ namespace core {
 
     class QuadMesh : public Mesh {
     public:
-        QuadMesh(float x, float y, float width, float height) : Mesh(Vec2(x, y)) {
+        QuadMesh(float x, float y, float width, float height) : Mesh(Vec2(x, y)), m_size(width, height) {
             m_vertexData = {
                     // X, Y, Z,
                     0,          0,          0,
@@ -64,26 +64,32 @@ namespace core {
             };
         }
 
-        const float* GetVertexData() const {
+        const float* GetVertexData() const override {
             return m_vertexData.data();
         };
 
-        const float* GetColorData() const {
+        const float* GetColorData() const override {
             return m_ColorData.data();
         }
 
-        const int GetVertexCount() const {
+        const int GetVertexCount() const override {
             return 6;
         };
+
+        Vec2 GetSize() const {
+            return m_size;
+        }
 
     private:
         std::vector<float> m_vertexData;
         std::vector<float> m_ColorData;
+
+        Vec2 m_size;
     };
 
     class CircleMesh : public Mesh {
     public:
-        CircleMesh(float x, float y, float radius, float segments) : Mesh(Vec2(x, y)) {
+        CircleMesh(float x, float y, float radius, float segments) : Mesh(Vec2(x, y)), m_radius(radius) {
 
             float segment = M_PI * 2 / segments;
             for (int i = 0; i < segments; ++i) {
@@ -124,20 +130,26 @@ namespace core {
             }
         }
 
-        const float* GetVertexData() const {
+        const float* GetVertexData() const override {
             return m_vertexData.data();
         };
 
-        const float* GetColorData() const {
+        const float* GetColorData() const override{
             return m_ColorData.data();
         }
 
-        const int GetVertexCount() const {
+        const int GetVertexCount() const override {
             return m_vertexData.size() / 3;
         };
+
+        float GetRadius() const {
+            return m_radius;
+        }
 
     private:
         std::vector<float> m_vertexData;
         std::vector<float> m_ColorData;
+
+        float m_radius;
     };
 }

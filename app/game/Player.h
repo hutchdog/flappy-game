@@ -8,7 +8,7 @@ namespace gameplay {
     public:
         //TODO: Remove hardcoded constants?
         //TODO: Derive from Renderable?
-        Player() : m_playerMesh(10, 50, 10, 24) {
+        Player() : m_playerMesh(10, 30, 10, 24) {
 
         };
         ~Player() {};

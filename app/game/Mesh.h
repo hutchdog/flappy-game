@@ -83,7 +83,7 @@ namespace core {
 
     class CircleMesh : public Mesh {
     public:
-        CircleMesh(float x, float y, float radius, float segments) {
+        CircleMesh(float x, float y, float radius, float segments) : Mesh(Vec2(x, y)) {
 
             float segment = M_PI * 2 / segments;
             for (int i = 0; i < segments; ++i) {

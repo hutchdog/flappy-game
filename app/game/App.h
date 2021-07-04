@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "Level.h"
 
 namespace core {
     class Renderer;
@@ -17,6 +18,7 @@ namespace core {
 
     protected:
         gameplay::Player m_player;
+        gameplay::Level m_level;
 
         void Update();
     };

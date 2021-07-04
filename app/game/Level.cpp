@@ -5,7 +5,7 @@
 using namespace gameplay;
 
 Level::Level() {
-
+    Update(0);
 }
 
 Level::~Level() {

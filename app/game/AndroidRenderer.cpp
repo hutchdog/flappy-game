@@ -91,13 +91,12 @@ void AndroidRenderer::CreateVS() {
         "void main()                    ",
         "{                              ",
         "   v_Color = a_Color;          ",
-        "   gl_Position = u_viewProjMatrix * u_modelMatrix *",
-        "                 a_Position;   ",
+        "   gl_Position = u_viewProjMatrix * u_modelMatrix * a_Position;   ",
         "}                              "
     };
 
     m_vertexProgram = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(m_vertexProgram, 11, vertexShaderSource, 0);
+    glShaderSource(m_vertexProgram, 10, vertexShaderSource, 0);
     glCompileShader(m_vertexProgram);
 
     int compileStatus[1];

@@ -11,10 +11,5 @@ namespace core {
         void Init(Renderer*) override;
         void Pause() override;
         void Resume() override;
-        void Draw() override;
-        void Touch() override;
-
-    protected:
-        void Update() override;
     };
 }

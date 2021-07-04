@@ -44,19 +44,6 @@ void AndroidApp::Resume() {
 
 }
 
-void AndroidApp::Draw() {
-    Update();
-
-}
-
-void AndroidApp::Touch() {
-    m_player.Touch();
-}
-
-void AndroidApp::Update() {
-    App::Update();
-}
-
 extern "C" {
 
 JNIEXPORT void JNICALL
@@ -78,6 +65,7 @@ Java_com_example_angrygeom_GameView_applicationResume(JNIEnv *env, jobject thiz)
 
 JNIEXPORT void JNICALL
 Java_com_example_angrygeom_GameView_applicationDraw(JNIEnv *env, jobject thiz) {
+    Application()->Update();
     Application()->Draw();
 }
 

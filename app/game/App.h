@@ -7,6 +7,12 @@
 namespace core {
     class Renderer;
 
+    enum class GameplayState : int {
+        StartGame = 0,
+        Play,
+        GameOver
+    };
+
     class App {
     public:
         App();
@@ -15,8 +21,11 @@ namespace core {
         virtual void Init(Renderer*) = 0;
         virtual void Pause() = 0;
         virtual void Resume() = 0;
-        virtual void Draw() = 0;
-        virtual void Touch() = 0;
+
+        virtual void Update();
+        virtual void Draw();
+
+        virtual void Touch();
 
     protected:
         gameplay::Player m_player;
@@ -25,7 +34,7 @@ namespace core {
 
         Renderer* m_renderer;
 
-        virtual void Update();
+        GameplayState m_gameplayState = GameplayState::StartGame;
     };
 }
 

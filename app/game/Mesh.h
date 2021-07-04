@@ -3,14 +3,11 @@
 #include <vector>
 
 namespace core {
-    //Lazy coding here, only required functions implemented!
+    //Lazy coding here, only required functions are implemented!
 
     struct Vec2 {
         Vec2() = default;
-
-        Vec2(float x, float y) : m_x(x), m_y(y) {
-
-        }
+        Vec2(float x, float y) : m_x(x), m_y(y) {}
 
         float m_x = 0;
         float m_y = 0;
@@ -19,22 +16,16 @@ namespace core {
     class Mesh {
     public:
         Mesh() = default;
-        Mesh(const Vec2& pos) {
-            m_pos = pos;
-        }
+        Mesh(const Vec2& pos);
         virtual ~Mesh() = default;
 
         virtual const float* GetVertexData() const = 0;
         virtual const float* GetColorData() const = 0;
         virtual const int GetVertexCount() const = 0;
 
-        void SetPos(const Vec2& pos) {
-            m_pos = pos;
-        }
+        void SetPos(const Vec2& pos);
 
-        Vec2 GetPos() const {
-            return m_pos;
-        }
+        Vec2 GetPos() const;
 
     protected:
         Vec2 m_pos;
@@ -42,43 +33,15 @@ namespace core {
 
     class QuadMesh : public Mesh {
     public:
-        QuadMesh(float x, float y, float width, float height) : Mesh(Vec2(x, y)), m_size(width, height) {
-            m_vertexData = {
-                    // X, Y, Z,
-                    0,          0,          0,
-                    0,          0 + height, 0,
-                    0 + width,  0 + height, 0,
-                    0,          0,          0,
-                    0 + width,  0 + height, 0,
-                    0 + width,  0,          0,
-            };
+        QuadMesh(float x, float y, float width, float height);
 
-            m_ColorData = {
-                    // R, G, B, A
-                    1.0f, 1.0f, 1.0f, 1.0f,
-                    0.8f, 0.8f, 1.0f, 1.0f,
-                    0.8f, 0.8f, 1.0f, 1.0f,
-                    0.8f, 0.8f, 1.0f, 1.0f,
-                    0.8f, 0.8f, 1.0f, 1.0f,
-                    0.8f, 0.8f, 1.0f, 1.0f,
-            };
-        }
+        const float* GetVertexData() const override;
 
-        const float* GetVertexData() const override {
-            return m_vertexData.data();
-        };
+        const float* GetColorData() const override;
 
-        const float* GetColorData() const override {
-            return m_ColorData.data();
-        }
+        const int GetVertexCount() const override;
 
-        const int GetVertexCount() const override {
-            return 6;
-        };
-
-        Vec2 GetSize() const {
-            return m_size;
-        }
+        Vec2 GetSize() const;
 
     private:
         std::vector<float> m_vertexData;
@@ -89,62 +52,14 @@ namespace core {
 
     class CircleMesh : public Mesh {
     public:
-        CircleMesh(float x, float y, float radius, float segments) : Mesh(Vec2(x, y)), m_radius(radius) {
+        CircleMesh(float x, float y, float radius, float segments);
+        const float* GetVertexData() const override;
 
-            float segment = M_PI * 2 / segments;
-            for (int i = 0; i < segments; ++i) {
-                float angle1 = segment * i;
-                float tx1 = radius * cosf(angle1);
-                float ty1 = radius * sinf(angle1);
+        const float* GetColorData() const override;
 
-                float angle2 = segment * (i + 1);
-                float tx2 = radius * cosf(angle2);
-                float ty2 = radius * sinf(angle2);
+        const int GetVertexCount() const override;
 
-                m_vertexData.push_back(0);
-                m_vertexData.push_back(0);
-                m_vertexData.push_back(0);
-
-                m_ColorData.push_back(0.8f);
-                m_ColorData.push_back(0.8f);
-                m_ColorData.push_back(1.0f);
-                m_ColorData.push_back(1.0f);
-
-                m_vertexData.push_back(tx1);
-                m_vertexData.push_back(ty1);
-                m_vertexData.push_back(0);
-
-                m_ColorData.push_back(0.8f);
-                m_ColorData.push_back(0.8f);
-                m_ColorData.push_back(1.0f);
-                m_ColorData.push_back(1.0f);
-
-                m_vertexData.push_back(tx2);
-                m_vertexData.push_back(ty2);
-                m_vertexData.push_back(0);
-
-                m_ColorData.push_back(0.8f);
-                m_ColorData.push_back(0.8f);
-                m_ColorData.push_back(1.0f);
-                m_ColorData.push_back(1.0f);
-            }
-        }
-
-        const float* GetVertexData() const override {
-            return m_vertexData.data();
-        };
-
-        const float* GetColorData() const override{
-            return m_ColorData.data();
-        }
-
-        const int GetVertexCount() const override {
-            return m_vertexData.size() / 3;
-        };
-
-        float GetRadius() const {
-            return m_radius;
-        }
+        float GetRadius() const;
 
     private:
         std::vector<float> m_vertexData;

@@ -46,8 +46,12 @@ void AndroidApp::Resume() {
 void AndroidApp::Draw() {
     Update();
     if (m_androidRenderer) {
-        //core::QuadMesh testMesh(0, 0, 10, 10);
-        m_androidRenderer->Render(m_player.GetMesh());
+        m_androidRenderer->BeginFrame();
+
+        m_player.Draw(m_androidRenderer);
+        m_level.Draw(m_androidRenderer);
+
+        m_androidRenderer->EndFrame();
     }
 }
 

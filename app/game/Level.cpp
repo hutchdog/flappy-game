@@ -39,32 +39,51 @@ bool Level::IntersectWithPlayer(const gameplay::Player& player) {
 
         core::Vec2 c = playerMesh.GetPos();
 
-        auto intersectWithLine = [playerMesh](Vec2 c, Vec2 a, Vec2 b) -> bool {
-            Vec2 tx;
+        auto quickIntersect = [&playerMesh](Vec2 c, Vec2 a, Vec2 b) -> bool {
+            auto squareR = playerMesh.GetRadius() * playerMesh.GetRadius();
             if (a.m_x == b.m_x) {
-                tx.m_x = a.m_x;
-                tx.m_y = c.m_y;
+                auto squareX = (a.m_x - c.m_x) * (a.m_x - c.m_x);
+                if (squareX > squareR)
+                    return false;
+
+                auto intersectY = sqrtf(squareR - squareX);
+
+                auto min = std::min(a.m_y, b.m_y);
+                auto max = std::max(a.m_y, b.m_y);
+
+                if ((c.m_y + intersectY) >= min && (c.m_y + intersectY) <= max)
+                    return true;
+
+                if ((c.m_y - intersectY) >= min && (c.m_y + intersectY) <= max)
+                    return true;
             }
 
             if (a.m_y == b.m_y) {
-                tx.m_x = c.m_x;
-                tx.m_y = a.m_y;
-            }
+                auto squareY = (a.m_y - c.m_y) * (a.m_y - c.m_y);
+                auto intersectX = sqrtf(squareR - squareY);
+                if (squareY > squareR)
+                    return false;
 
-            Vec2 delta(tx.m_x - c.m_x, tx.m_y - c.m_y);
-            float dx2 = powf(delta.m_x, 2);
-            float dy2 = powf(delta.m_y, 2);
-            float length = sqrtf(dx2 + dy2);
-            return length <= playerMesh.GetRadius();
+                auto min = std::min(a.m_x, b.m_x);
+                auto max = std::max(a.m_x, b.m_x);
+
+                if ((c.m_x + intersectX) >= min && (c.m_x + intersectX) <= max)
+                    return true;
+
+                if ((c.m_x - intersectX) >= min && (c.m_x - intersectX) <= max)
+                    return true;
+            }
+            return false;
         };
 
         core::Vec2 pos = blockMesh.GetPos();
         core::Vec2 size = blockMesh.GetSize();
 
-        //Intersect AB & BC - do not need to check other lines by design
-        bool ab = intersectWithLine(c, pos, Vec2(pos.m_x, pos.m_y + size.m_y));
-        bool bc = intersectWithLine(c, pos, Vec2(pos.m_x + size.m_x, pos.m_y + size.m_y));
-        if (ab || bc) {
+        //Micro-optimization, intersect AB & BC & AD - do not need to check back lines by design
+        bool ab = quickIntersect(c, pos, Vec2(pos.m_x, pos.m_y + size.m_y));
+        bool bc = quickIntersect(c, Vec2(pos.m_x, pos.m_y + size.m_y) , Vec2(pos.m_x + size.m_x, pos.m_y + size.m_y));
+        bool ad = quickIntersect(c, Vec2(pos.m_x, pos.m_y) , Vec2(pos.m_x + size.m_x, pos.m_y));
+        if (ab || bc || ad) {
             return true;
         }
     }

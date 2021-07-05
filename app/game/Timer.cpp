@@ -8,6 +8,14 @@ Timer::Timer() {
     m_previousTime = m_currentTime = GetTime();
 }
 
+void Timer::Pause() {
+
+}
+
+void Timer::Resume() {
+    m_previousTime = m_currentTime = GetTime();
+}
+
 float Timer::GetDelta() {
     m_previousTime = m_currentTime;
     m_currentTime = GetTime();

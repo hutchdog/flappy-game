@@ -17,19 +17,10 @@ namespace {
         if (application == nullptr)
             application.reset(new AndroidApp());
     }
-
 }
 
 core::App *Application() {
     return application.get();
-}
-
-AndroidApp::AndroidApp() {
-
-}
-
-AndroidApp::~AndroidApp() {
-    //TODO: release refs
 }
 
 void AndroidApp::Init(Renderer* renderer) {
@@ -37,11 +28,11 @@ void AndroidApp::Init(Renderer* renderer) {
 }
 
 void AndroidApp::Pause() {
-
+    App::Pause();
 }
 
 void AndroidApp::Resume() {
-
+    App::Resume();
 }
 
 extern "C" {

@@ -5,8 +5,8 @@
 namespace core {
     class AndroidApp : public App {
     public:
-        AndroidApp();
-        ~AndroidApp() override;
+        AndroidApp() = default;
+        ~AndroidApp() = default;
 
         void Init(Renderer*) override;
         void Pause() override;

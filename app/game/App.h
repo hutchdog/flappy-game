@@ -10,6 +10,7 @@ namespace core {
     enum class GameplayState : int {
         StartGame = 0,
         Play,
+        Pause,
         GameOver
     };
 
@@ -20,9 +21,9 @@ namespace core {
         virtual ~App() = default;
 
         virtual void Init(Renderer *) = 0;
-        virtual void Pause() = 0;
-        virtual void Resume() = 0;
 
+        virtual void Pause();
+        virtual void Resume();
         virtual void Update();
         virtual void Draw();
         virtual void Touch();

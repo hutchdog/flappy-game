@@ -7,6 +7,9 @@ namespace core {
     public:
         Timer();
 
+        void Pause();
+        void Resume();
+
         float GetDelta();
 
     private:

@@ -4,8 +4,23 @@
 
 using core::App;
 
+void App::Pause() {
+    m_timer.Pause();
+    if (m_gameplayState == GameplayState::Play) {
+        m_gameplayState = GameplayState::Pause;
+    }
+}
+
+void App::Resume() {
+    m_timer.Resume();
+}
+
 void App::Update() {
     auto dt = m_timer.GetDelta();
+
+    if (m_gameplayState == GameplayState::Pause) {
+        return;
+    }
 
     if (m_gameplayState == GameplayState::Play) {
         m_player.Update(dt);
@@ -35,16 +50,19 @@ void App::Draw() {
 
 void App::Touch() {
     //Waiting for first touch to start a game
-    if (m_gameplayState == GameplayState::StartGame) {
+    if (m_gameplayState == GameplayState::StartGame || m_gameplayState == GameplayState::Pause) {
         m_gameplayState = GameplayState::Play;
+        return;
     }
 
     if (m_gameplayState == GameplayState::Play) {
         m_player.Touch();
+        return;
     }
 
     if (m_gameplayState == GameplayState::GameOver) {
         ResetGame();
+        return;
     }
 }
 
@@ -56,6 +74,4 @@ void App::ResetGame() {
         auto& camera = m_renderer->GetCamera();
         camera.SetOffset(Vec2(0, 0));
     }
-
-    m_gameplayState = GameplayState::Play;
 }

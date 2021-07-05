@@ -60,7 +60,8 @@ bool Level::IntersectWithPlayer(const gameplay::Player& player) {
 
             auto quickIntersect = [&playerMesh](Vec2 c, Vec2 a, Vec2 b) -> bool {
                 auto squareR = playerMesh.GetRadius() * playerMesh.GetRadius();
-                if (a.m_x == b.m_x) {
+                const auto epsilon = std::numeric_limits<float>::epsilon();
+                if (std::abs(a.m_x - b.m_x) < epsilon) {
                     auto squareX = (a.m_x - c.m_x) * (a.m_x - c.m_x);
                     if (squareX > squareR)
                         return false;
@@ -77,7 +78,7 @@ bool Level::IntersectWithPlayer(const gameplay::Player& player) {
                         return true;
                 }
 
-                if (a.m_y == b.m_y) {
+                if (std::abs(a.m_y - b.m_y) < epsilon) {
                     auto squareY = (a.m_y - c.m_y) * (a.m_y - c.m_y);
                     auto intersectX = sqrtf(squareR - squareY);
                     if (squareY > squareR)

@@ -17,5 +17,19 @@ namespace core {
     private:
         Vec2 m_size;
         Vec2 m_offset;
+
+        float m_viewMatrix[16] = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1,
+        };
+
+        float m_projectionMatrix[16] = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1,
+        };
     };
 }

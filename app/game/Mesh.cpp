@@ -29,12 +29,12 @@ QuadMesh::QuadMesh(float x, float y, float width, float height) : Mesh(Vec2(x, y
 
     m_ColorData = {
             // R, G, B, A
-            1.0f, 1.0f, 1.0f, 1.0f,
-            0.8f, 0.8f, 1.0f, 1.0f,
-            0.8f, 0.8f, 1.0f, 1.0f,
-            0.8f, 0.8f, 1.0f, 1.0f,
-            0.8f, 0.8f, 1.0f, 1.0f,
-            0.8f, 0.8f, 1.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
     };
 }
 
@@ -70,8 +70,8 @@ CircleMesh::CircleMesh(float x, float y, float radius, float segments) : Mesh(Ve
         m_vertexData.push_back(0);
         m_vertexData.push_back(0);
 
-        m_ColorData.push_back(0.8f);
-        m_ColorData.push_back(0.8f);
+        m_ColorData.push_back(0.f);
+        m_ColorData.push_back(0.f);
         m_ColorData.push_back(1.0f);
         m_ColorData.push_back(1.0f);
 
@@ -79,8 +79,8 @@ CircleMesh::CircleMesh(float x, float y, float radius, float segments) : Mesh(Ve
         m_vertexData.push_back(ty1);
         m_vertexData.push_back(0);
 
-        m_ColorData.push_back(0.8f);
-        m_ColorData.push_back(0.8f);
+        m_ColorData.push_back(0.f);
+        m_ColorData.push_back(0.f);
         m_ColorData.push_back(1.0f);
         m_ColorData.push_back(1.0f);
 
@@ -88,8 +88,8 @@ CircleMesh::CircleMesh(float x, float y, float radius, float segments) : Mesh(Ve
         m_vertexData.push_back(ty2);
         m_vertexData.push_back(0);
 
-        m_ColorData.push_back(0.8f);
-        m_ColorData.push_back(0.8f);
+        m_ColorData.push_back(0.f);
+        m_ColorData.push_back(0.f);
         m_ColorData.push_back(1.0f);
         m_ColorData.push_back(1.0f);
     }
@@ -104,9 +104,13 @@ const float* CircleMesh::GetColorData() const {
 }
 
 const int CircleMesh::GetVertexCount() const {
-    return m_vertexData.size() / 3;
+    return m_vertexData.size();
 };
 
 float CircleMesh::GetRadius() const {
     return m_radius;
+}
+
+Vec2 CircleMesh::GetSize() const {
+    return Vec2(m_radius, m_radius);
 }

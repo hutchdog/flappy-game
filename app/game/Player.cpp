@@ -2,7 +2,7 @@
 
 using gameplay::Player;
 
-Player::Player() : m_playerMesh(-40, 0, 10, 24) {
+Player::Player() : m_playerMesh(-40, 0, 8, 24) {
 
 }
 Player::~Player() {};
@@ -33,5 +33,5 @@ const core::Mesh& Player::GetMesh() const {
 }
 
 void Player::Touch() {
-    m_horizontalSpeed = 0.5f;
+    m_horizontalSpeed = 0.35f;
 }

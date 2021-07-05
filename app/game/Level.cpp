@@ -1,6 +1,8 @@
 #include "Level.h"
 
 #include <cmath>
+#include <cstdlib>
+
 
 using namespace gameplay;
 
@@ -13,8 +15,27 @@ Level::~Level() {
 }
 
 void Level::Update(float dt) {
-    if (m_blocks.empty()) {
-        m_blocks.emplace_back(Block(0, -50, 10, 50));
+    std::uniform_int_distribution<int> uniform_dist(1, 3);
+
+    //Initial block
+    if (m_blocks.empty())
+        m_blocks.emplace_back(Block(0, -50, 15, 40));
+
+    //Create new blocks
+    while (m_blocks.size() < m_ForwardBlockCount) {
+        static bool upBlock = false;
+        auto& lastBlock = m_blocks.back();
+
+        int random = uniform_dist(m_randomDevice);
+        int height = 30 + 10 * random;
+
+        if (upBlock) {
+            m_blocks.push_back(Block(m_blocks.back().GetMesh().GetPos().m_x + 50, 50 - height, 15, height));
+        } else {
+            m_blocks.push_back(Block(m_blocks.back().GetMesh().GetPos().m_x + 50, -50, 15, height));
+        }
+
+        upBlock = !upBlock;
     }
 }
 
@@ -97,4 +118,22 @@ bool Level::IntersectWithPlayer(const gameplay::Player& player) {
         return true;
 
     return false;
+}
+
+void Level::CleanupBlocks(const gameplay::Player& player) {
+    if (m_blocks.empty())
+        return;
+
+    auto& midBlock = *(m_blocks.begin() + 5);
+    auto& blockMesh = midBlock.GetMesh();
+
+    float eraseCoordinate = blockMesh.GetPos().m_x + blockMesh.GetSize().m_x;
+    if (eraseCoordinate <= player.GetMesh().GetPos().m_x) {
+        m_blocks.erase(m_blocks.begin());
+    }
+}
+
+void Level::Reset() {
+    m_blocks.clear();
+    Update(0);
 }

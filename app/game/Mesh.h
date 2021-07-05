@@ -27,6 +27,8 @@ namespace core {
 
         Vec2 GetPos() const;
 
+        virtual Vec2 GetSize() const = 0;
+
     protected:
         Vec2 m_pos;
     };
@@ -61,6 +63,8 @@ namespace core {
         const int GetVertexCount() const override;
 
         float GetRadius() const;
+
+        Vec2 GetSize() const override;
 
     private:
         std::vector<float> m_vertexData;

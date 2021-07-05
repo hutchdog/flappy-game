@@ -23,6 +23,8 @@ void App::Update() {
         if (isGameOver)
             m_gameplayState = GameplayState::GameOver;
 
+        m_level.CleanupBlocks(m_player);
+
         if (m_renderer)
             m_renderer->Update(dt);
     }
@@ -52,6 +54,7 @@ void App::Touch() {
     if (m_gameplayState == GameplayState::GameOver) {
         //TODO: Reset GS and score here!
         m_player.GetMesh().SetPos(Vec2(-40, 0));
+        m_level.Reset();
 
         if (m_renderer) {
             auto& camera = m_renderer->GetCamera();

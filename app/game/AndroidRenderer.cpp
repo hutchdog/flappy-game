@@ -61,9 +61,9 @@ void AndroidRenderer::DisplayInit() {
     int windowHeight = ANativeWindow_getHeight(window);
 
     glViewport(0, 0, windowWidth, windowHeight);
-    glDisable(GL_CULL_FACE);
 
     m_defaultCamera.SetViewport(Vec2(windowWidth, windowHeight));
+    m_defaultCamera.SetOffset(Vec2(0, 0));
 }
 
 void AndroidRenderer::CreateVS() {
@@ -157,7 +157,9 @@ void AndroidRenderer::CreateProgram() {
 
 void AndroidRenderer::BeginFrame() {
     glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glUseProgram(m_program);
 }
 
 void AndroidRenderer::Update(float dt) {
@@ -191,7 +193,8 @@ void AndroidRenderer::Render(const Mesh& mesh) {
     glUniformMatrix4fv(m_viewMatrixAttribute, 1, false, m_defaultCamera.GetViewMatrix());
     glUniformMatrix4fv(m_projMatrixAttribute, 1, false, m_defaultCamera.GetProjMatrix());
 
-    glDrawArrays(GL_TRIANGLES, 0, mesh.GetVertexCount());
+    int vertexCount = mesh.GetVertexCount();
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount / 3);
 }
 
 void AndroidRenderer::EndFrame() {

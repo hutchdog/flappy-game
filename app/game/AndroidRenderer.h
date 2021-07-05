@@ -12,8 +12,8 @@ namespace core {
 
     class AndroidRenderer : public Renderer {
     public:
-        AndroidRenderer(JNIEnv* environment, jobject context, jobject view);
-        ~AndroidRenderer() override;
+        AndroidRenderer(JNIEnv* environment, jobject view);
+        ~AndroidRenderer() = default;
 
         void BeginFrame() override;
         void Update(float dt) override;
@@ -22,11 +22,10 @@ namespace core {
 
     private:
         JNIEnv* m_environment   = nullptr;
-        jobject m_context       = nullptr;
         jobject m_view          = nullptr;
 
-        EGLDisplay m_display;
-        EGLSurface m_surface;
+        EGLDisplay m_display    = nullptr;
+        EGLSurface m_surface    = nullptr;
 
         GLint m_vertexProgram       = 0;
         GLint m_fragmentProgram     = 0;
@@ -41,6 +40,6 @@ namespace core {
         void DisplayInit();
         void CreateVS();
         void CreatePS();
-        void CreateProgram();
+        void ShaderProgramInit();
     };
 }

@@ -18,7 +18,6 @@ Vec2 Mesh::GetPos() const {
 
 QuadMesh::QuadMesh(float x, float y, float width, float height) : Mesh(Vec2(x, y)), m_size(width, height) {
     m_vertexData = {
-            // X, Y, Z,
             0, 0, 0,
             0, 0 + height, 0,
             0 + width, 0 + height, 0,
@@ -28,7 +27,6 @@ QuadMesh::QuadMesh(float x, float y, float width, float height) : Mesh(Vec2(x, y
     };
 
     m_ColorData = {
-            // R, G, B, A
             0.0f, 1.0f, 0.0f, 1.0f,
             0.0f, 1.0f, 0.0f, 1.0f,
             0.0f, 1.0f, 0.0f, 1.0f,
@@ -46,7 +44,7 @@ const float* QuadMesh::GetColorData() const {
     return m_ColorData.data();
 }
 
-const int QuadMesh::GetVertexCount() const {
+int QuadMesh::GetVertexCount() const {
     return m_vertexData.size();
 }
 
@@ -103,7 +101,7 @@ const float* CircleMesh::GetColorData() const {
     return m_ColorData.data();
 }
 
-const int CircleMesh::GetVertexCount() const {
+int CircleMesh::GetVertexCount() const {
     return m_vertexData.size();
 };
 

@@ -5,9 +5,6 @@ using gameplay::Block;
 Block::Block(float x, float y, float width, float height) : m_blockMesh(x, y, width, height) {
     m_blockMesh.SetPos(core::Vec2(x, y));
 };
-Block::~Block() {};
-
-void Block::Update(float dt) {};
 
 void Block::Draw(core::Renderer* renderer) {
     if (!renderer)

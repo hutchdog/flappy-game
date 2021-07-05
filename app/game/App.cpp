@@ -4,14 +4,6 @@
 
 using core::App;
 
-App::App() {
-
-}
-
-App::~App() {
-
-}
-
 void App::Update() {
     auto dt = m_timer.GetDelta();
 
@@ -52,15 +44,18 @@ void App::Touch() {
     }
 
     if (m_gameplayState == GameplayState::GameOver) {
-        //TODO: Reset GS and score here!
-        m_player.GetMesh().SetPos(Vec2(-40, 0));
-        m_level.Reset();
-
-        if (m_renderer) {
-            auto& camera = m_renderer->GetCamera();
-            camera.SetOffset(Vec2(0, 0));
-        }
-
-        m_gameplayState = GameplayState::Play;
+        ResetGame();
     }
+}
+
+void App::ResetGame() {
+    m_player.GetMesh().SetPos(Vec2(-40, 0));
+    m_level.Reset();
+
+    if (m_renderer) {
+        auto& camera = m_renderer->GetCamera();
+        camera.SetOffset(Vec2(0, 0));
+    }
+
+    m_gameplayState = GameplayState::Play;
 }

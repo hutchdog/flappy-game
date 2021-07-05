@@ -6,6 +6,12 @@ using core::Vec2;
 void Camera::SetViewport(Vec2 size) {
     m_size = size;
 
+    //Sanity check
+    if (size.m_x == 0 || size.m_y == 0) {
+        assert(false && "Viewport sizes set incorrect!");
+        return;
+    }
+
     float aspectFix = ((float)m_size.m_y / (float)m_size.m_x);
 
     m_projectionMatrix[0] = 2.f / 100.f * aspectFix;

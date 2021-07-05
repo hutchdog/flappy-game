@@ -5,7 +5,6 @@ using gameplay::Player;
 Player::Player() : m_playerMesh(-40, 0, 8, 24) {
 
 }
-Player::~Player() {};
 
 void Player::Update(float dt) {
     auto currentPos = m_playerMesh.GetPos();

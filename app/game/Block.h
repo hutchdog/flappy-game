@@ -6,12 +6,8 @@
 namespace gameplay {
     class Block {
     public:
-        //TODO: Remove hardcoded constants?
-        //TODO: Derive from Renderable?
         Block(float x, float y, float width, float height);
-        ~Block();
-
-        void Update(float dt);
+        ~Block() = default;
 
         void Draw(core::Renderer* renderer);
 

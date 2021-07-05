@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <random>
 
 #include "Block.h"
@@ -11,7 +11,7 @@ namespace gameplay {
     class Level {
     public:
         Level();
-        ~Level();
+        ~Level() = default;
 
         void Update(float dt);
 
@@ -22,9 +22,10 @@ namespace gameplay {
         void Reset();
 
     private:
-        std::vector<gameplay::Block> m_blocks;
+        std::list<gameplay::Block> m_blocks;
 
-        std::default_random_engine m_randomDevice;
+        std::random_device m_seedDevice;
+        std::mt19937 m_randomDevice;
 
         const int m_ForwardBlockCount = 10;
     };

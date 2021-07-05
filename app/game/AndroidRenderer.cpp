@@ -7,21 +7,19 @@
 
 using core::AndroidRenderer;
 
-AndroidRenderer::AndroidRenderer(JNIEnv* environment, jobject context, jobject view) : m_environment(environment), m_context(context), m_view(view) {
+AndroidRenderer::AndroidRenderer(JNIEnv* environment, jobject view) : m_environment(environment), m_view(view) {
     DisplayInit();
     CreateVS();
     CreatePS();
-    CreateProgram();
-}
-
-AndroidRenderer::~AndroidRenderer() {
-    //TODO: release refs
+    ShaderProgramInit();
 }
 
 void AndroidRenderer::DisplayInit() {
     m_display = eglGetDisplay( EGL_DEFAULT_DISPLAY);
-    if (m_display == EGL_NO_DISPLAY)
+    if (m_display == EGL_NO_DISPLAY) {
+        assert(false && "Can't get display!");
         return;
+    }
 
     EGLint major = 0;
     EGLint minor = 1;
@@ -42,20 +40,24 @@ void AndroidRenderer::DisplayInit() {
     EGLConfig eglConfig;
     eglChooseConfig(m_display, configAttributes, &eglConfig, 1, &numConfig);
 
-    // Create a surface for the main window
     auto window = ANativeWindow_fromSurface(m_environment, m_view);
-
-    if ((m_surface = eglCreateWindowSurface(m_display, eglConfig, (EGLNativeWindowType) window, nullptr)) == EGL_NO_SURFACE)
+    if ((m_surface = eglCreateWindowSurface(m_display, eglConfig, (EGLNativeWindowType) window, nullptr)) == EGL_NO_SURFACE) {
+        assert(false && "Can't get native surface!");
         return;
+    }
 
     EGLContext eglContext = nullptr;
     EGLint contextAttributes[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE };
-    // Create an OpenGL ES context
-    if ((eglContext = eglCreateContext(m_display, eglConfig, EGL_NO_CONTEXT, contextAttributes)) == EGL_NO_CONTEXT)
+
+    if ((eglContext = eglCreateContext(m_display, eglConfig, EGL_NO_CONTEXT, contextAttributes)) == EGL_NO_CONTEXT) {
+        assert(false && "Can't create context!");
         return;
-    // Make the context and surface current
-    if (!eglMakeCurrent(m_display, m_surface, m_surface, eglContext))
+    }
+
+    if (!eglMakeCurrent(m_display, m_surface, m_surface, eglContext)) {
+        assert(false && "Can't set current context!");
         return;
+    }
 
     int windowWidth = ANativeWindow_getWidth(window);
     int windowHeight = ANativeWindow_getHeight(window);
@@ -85,7 +87,7 @@ void AndroidRenderer::CreateVS() {
     };
 
     m_vertexProgram = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(m_vertexProgram, 11, vertexShaderSource, 0);
+    glShaderSource(m_vertexProgram, 11, vertexShaderSource, nullptr);
     glCompileShader(m_vertexProgram);
 
     int compileStatus[1];
@@ -111,7 +113,7 @@ void AndroidRenderer::CreatePS() {
     };
 
     m_fragmentProgram = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(m_fragmentProgram, 6, fragmentShaderSource, 0);
+    glShaderSource(m_fragmentProgram, 6, fragmentShaderSource, nullptr);
     glCompileShader(m_fragmentProgram);
 
     int compileStatus[1];
@@ -124,7 +126,7 @@ void AndroidRenderer::CreatePS() {
     }
 }
 
-void AndroidRenderer::CreateProgram() {
+void AndroidRenderer::ShaderProgramInit() {
     m_program = glCreateProgram();
 
     if (m_program != 0)
@@ -158,8 +160,6 @@ void AndroidRenderer::CreateProgram() {
 void AndroidRenderer::BeginFrame() {
     glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glUseProgram(m_program);
 }
 
 void AndroidRenderer::Update(float dt) {

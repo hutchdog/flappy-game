@@ -15,24 +15,26 @@ namespace core {
 
     class App {
     public:
-        App();
-        virtual ~App();
+        App() = default;
 
-        virtual void Init(Renderer*) = 0;
+        virtual ~App() = default;
+
+        virtual void Init(Renderer *) = 0;
         virtual void Pause() = 0;
         virtual void Resume() = 0;
 
         virtual void Update();
         virtual void Draw();
-
         virtual void Touch();
+
+        virtual void ResetGame();
 
     protected:
         gameplay::Player m_player;
         gameplay::Level m_level;
         core::Timer m_timer;
 
-        Renderer* m_renderer;
+        Renderer *m_renderer = nullptr;
 
         GameplayState m_gameplayState = GameplayState::StartGame;
     };

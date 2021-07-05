@@ -6,10 +6,8 @@
 namespace gameplay {
     class Player {
     public:
-        //TODO: Remove hardcoded constants?
-        //TODO: Derive from Renderable?
         Player();
-        ~Player();
+        ~Player() = default;
 
         void Update(float dt);
 

@@ -47,30 +47,30 @@ void AndroidApp::Resume() {
 extern "C" {
 
 JNIEXPORT void JNICALL
-Java_com_example_angrygeom_GameView_applicationInit(JNIEnv *env, jobject thiz, jobject context,
+Java_com_example_angrygeom_GameView_applicationInit(JNIEnv *env, jobject, jobject context,
                                                     jobject view) {
     Instantiate();
-    Application()->Init(new AndroidRenderer(env, context, view));
+    Application()->Init(new AndroidRenderer(env, view));
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_angrygeom_GameView_applicationPause(JNIEnv *env, jobject thiz) {
+Java_com_example_angrygeom_GameView_applicationPause(JNIEnv*, jobject) {
     Application()->Pause();
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_angrygeom_GameView_applicationResume(JNIEnv *env, jobject thiz) {
+Java_com_example_angrygeom_GameView_applicationResume(JNIEnv*, jobject) {
     Application()->Resume();
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_angrygeom_GameView_applicationDraw(JNIEnv *env, jobject thiz) {
+Java_com_example_angrygeom_GameView_applicationDraw(JNIEnv*, jobject) {
     Application()->Update();
     Application()->Draw();
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_angrygeom_GameView_applicationOnTouch(JNIEnv *env, jobject thiz) {
+Java_com_example_angrygeom_GameView_applicationOnTouch(JNIEnv*, jobject) {
     Application()->Touch();
 }
 

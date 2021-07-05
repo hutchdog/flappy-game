@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-#include <time.h>
+#include <ctime>
 
 using core::Timer;
 

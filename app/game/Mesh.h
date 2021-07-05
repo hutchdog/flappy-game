@@ -21,7 +21,7 @@ namespace core {
 
         virtual const float* GetVertexData() const = 0;
         virtual const float* GetColorData() const = 0;
-        virtual const int GetVertexCount() const = 0;
+        virtual int GetVertexCount() const = 0;
 
         void SetPos(const Vec2& pos);
 
@@ -41,9 +41,9 @@ namespace core {
 
         const float* GetColorData() const override;
 
-        const int GetVertexCount() const override;
+        int GetVertexCount() const override;
 
-        Vec2 GetSize() const;
+        Vec2 GetSize() const override;
 
     private:
         std::vector<float> m_vertexData;
@@ -60,7 +60,7 @@ namespace core {
 
         const float* GetColorData() const override;
 
-        const int GetVertexCount() const override;
+        int GetVertexCount() const override;
 
         float GetRadius() const;
 

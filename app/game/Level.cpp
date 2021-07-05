@@ -88,5 +88,13 @@ bool Level::IntersectWithPlayer(const gameplay::Player& player) {
         }
     }
 
+    //TODO: Design height from constants
+    //Check for floor-ceiling intersections
+    if (playerMesh.GetPos().m_y - playerMesh.GetRadius() <= -50)
+        return true;
+
+    if (playerMesh.GetPos().m_y + playerMesh.GetRadius() >= 50)
+        return true;
+
     return false;
 }

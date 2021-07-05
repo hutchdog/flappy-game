@@ -9,7 +9,7 @@ Player::~Player() {};
 
 void Player::Update(float dt) {
     auto currentPos = m_playerMesh.GetPos();
-    currentPos.m_x += 6 * dt;
+    currentPos.m_x += 8 * dt;
 
     m_horizontalSpeed -= 0.5f * dt;
     currentPos.m_y += m_horizontalSpeed;
@@ -33,5 +33,5 @@ const core::Mesh& Player::GetMesh() const {
 }
 
 void Player::Touch() {
-    m_horizontalSpeed = 0.7f;
+    m_horizontalSpeed = 0.5f;
 }

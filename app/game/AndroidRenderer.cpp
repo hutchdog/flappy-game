@@ -162,7 +162,7 @@ void AndroidRenderer::BeginFrame() {
 
 void AndroidRenderer::Update(float dt) {
     auto offset = m_defaultCamera.GetOffset();
-    offset.m_x -= 6.f * dt;
+    offset.m_x -= 8.f * dt;
     m_defaultCamera.SetOffset(offset);
 }
 

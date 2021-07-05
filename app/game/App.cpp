@@ -51,5 +51,13 @@ void App::Touch() {
 
     if (m_gameplayState == GameplayState::GameOver) {
         //TODO: Reset GS and score here!
+        m_player.GetMesh().SetPos(Vec2(-40, 0));
+
+        if (m_renderer) {
+            auto& camera = m_renderer->GetCamera();
+            camera.SetOffset(Vec2(0, 0));
+        }
+
+        m_gameplayState = GameplayState::Play;
     }
 }

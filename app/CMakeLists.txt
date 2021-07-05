@@ -10,6 +10,8 @@ set(SOURCE_FILES
         game/App.cpp
         game/AndroidApp.cpp
         game/AndroidRenderer.cpp
+        game/Camera.cpp
+        game/Player.cpp
         game/Level.cpp
         game/Timer.cpp
         game/Mesh.cpp

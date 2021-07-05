@@ -53,6 +53,7 @@ namespace core {
     class CircleMesh : public Mesh {
     public:
         CircleMesh(float x, float y, float radius, float segments);
+
         const float* GetVertexData() const override;
 
         const float* GetColorData() const override;

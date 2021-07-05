@@ -7,15 +7,6 @@
 
 using core::AndroidRenderer;
 
-namespace {
-    float projectionMatrix[] = {
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1,
-    };
-}
-
 AndroidRenderer::AndroidRenderer(JNIEnv* environment, jobject context, jobject view) : m_environment(environment), m_context(context), m_view(view) {
     DisplayInit();
     CreateVS();
@@ -72,31 +63,29 @@ void AndroidRenderer::DisplayInit() {
     glViewport(0, 0, windowWidth, windowHeight);
     glDisable(GL_CULL_FACE);
 
-    float aspectFix = ((float)windowHeight / (float)windowWidth);
-
-    projectionMatrix[0] = 2.f / 100.f * aspectFix;
-    projectionMatrix[5] = 2.f / 100.f; //Design height
+    m_defaultCamera.SetViewport(Vec2(windowWidth, windowHeight));
 }
 
 void AndroidRenderer::CreateVS() {
     const GLchar* vertexShaderSource[] = {
-        "uniform mat4 u_viewProjMatrix; ",
-        "uniform mat4 u_modelMatrix;    ",
+            "uniform mat4 u_projMatrix;     ",
+            "uniform mat4 u_viewMatrix;     ",
+            "uniform mat4 u_modelMatrix;    ",
 
-        "attribute vec4 a_Position;     ",
-        "attribute vec4 a_Color;        ",
+            "attribute vec4 a_Position;     ",
+            "attribute vec4 a_Color;        ",
 
-        "varying vec4 v_Color;          ",
+            "varying vec4 v_Color;          ",
 
-        "void main()                    ",
-        "{                              ",
-        "   v_Color = a_Color;          ",
-        "   gl_Position = u_viewProjMatrix * u_modelMatrix * a_Position;   ",
-        "}                              "
+            "void main()                    ",
+            "{                              ",
+            "   v_Color = a_Color;          ",
+            "   gl_Position = u_projMatrix * u_viewMatrix * u_modelMatrix * a_Position;   ",
+            "}                              "
     };
 
     m_vertexProgram = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(m_vertexProgram, 10, vertexShaderSource, 0);
+    glShaderSource(m_vertexProgram, 11, vertexShaderSource, 0);
     glCompileShader(m_vertexProgram);
 
     int compileStatus[1];
@@ -157,7 +146,8 @@ void AndroidRenderer::CreateProgram() {
         }
     }
 
-    m_viewMatrixAttribute = glGetUniformLocation(m_program, "u_viewProjMatrix");
+    m_projMatrixAttribute = glGetUniformLocation(m_program, "u_projMatrix");
+    m_viewMatrixAttribute = glGetUniformLocation(m_program, "u_viewMatrix");
     m_modelMatrixAttribute = glGetUniformLocation(m_program, "u_modelMatrix");
     m_posAttribute = glGetAttribLocation(m_program, "a_Position");
     m_colorAttribute = glGetAttribLocation(m_program, "a_Color");
@@ -171,7 +161,9 @@ void AndroidRenderer::BeginFrame() {
 }
 
 void AndroidRenderer::Update(float dt) {
-    projectionMatrix[12] -= 6.f * dt * projectionMatrix[0];
+    auto offset = m_defaultCamera.GetOffset();
+    offset.m_x -= 6.f * dt;
+    m_defaultCamera.SetOffset(offset);
 }
 
 void AndroidRenderer::Render(const Mesh& mesh) {
@@ -195,7 +187,9 @@ void AndroidRenderer::Render(const Mesh& mesh) {
     };
 
     glUniformMatrix4fv(m_modelMatrixAttribute, 1, false, modelMatrix);
-    glUniformMatrix4fv(m_viewMatrixAttribute, 1, false, projectionMatrix);
+
+    glUniformMatrix4fv(m_viewMatrixAttribute, 1, false, m_defaultCamera.GetViewMatrix());
+    glUniformMatrix4fv(m_projMatrixAttribute, 1, false, m_defaultCamera.GetProjMatrix());
 
     glDrawArrays(GL_TRIANGLES, 0, mesh.GetVertexCount());
 }

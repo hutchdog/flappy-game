@@ -8,35 +8,18 @@ namespace gameplay {
     public:
         //TODO: Remove hardcoded constants?
         //TODO: Derive from Renderable?
-        Player() : m_playerMesh(-40, 0, 10, 24) {
+        Player();
+        ~Player();
 
-        };
-        ~Player() {};
+        void Update(float dt);
 
-        void Update(float dt) {
-            auto currentPos = m_playerMesh.GetPos();
-            currentPos.m_x += 6 * dt;
+        void Draw(core::Renderer* renderer);
 
-            m_horizontalSpeed -= 0.5f * dt;
-            currentPos.m_y += m_horizontalSpeed;
+        core::Mesh& GetMesh();
 
-            m_playerMesh.SetPos(currentPos);
-        };
+        const core::Mesh& GetMesh() const;
 
-        void Draw(core::Renderer* renderer) {
-            if (!renderer)
-                return;
-
-            renderer->Render(m_playerMesh);
-        }
-
-        const core::Mesh& GetMesh() const {
-            return m_playerMesh;
-        }
-
-        void Touch() {
-            m_horizontalSpeed = 0.7f;
-        }
+        void Touch();
 
     private:
         core::CircleMesh m_playerMesh;

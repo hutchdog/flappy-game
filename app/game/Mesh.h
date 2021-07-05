@@ -3,8 +3,6 @@
 #include <vector>
 
 namespace core {
-    //Lazy coding here, only required functions are implemented!
-
     struct Vec2 {
         Vec2() = default;
         Vec2(float x, float y) : m_x(x), m_y(y) {}

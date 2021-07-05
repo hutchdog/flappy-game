@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "Common.h"
 
 #include <cmath>
 #include <cstdlib>
@@ -10,11 +11,15 @@ Level::Level() : m_randomDevice(m_seedDevice()) {
 }
 
 void Level::Update(float) {
-    std::uniform_int_distribution<int> uniform_dist(1, 3);
+    using namespace common;
+
+    std::uniform_int_distribution<int> uniform_dist(BlockDeltaLow, BlockDeltaHigh);
+
+    const float halfScreen = ScreenDesignHeight / 2.f;
 
     //Initial fixed block
     if (m_blocks.empty())
-        m_blocks.emplace_back(Block(0, -50, 15, 40));
+        m_blocks.emplace_back(Block(0, -BlockOffset, BlockWidth, halfScreen));
 
     //Create new blocks
     while (m_blocks.size() < m_ForwardBlockCount) {
@@ -23,12 +28,12 @@ void Level::Update(float) {
         auto& lastMesh = lastBlock.GetMesh();
 
         int random = uniform_dist(m_randomDevice);
-        float height = 30.f + 10.f * random;
+        float height = BlockBaseHeight + random;
 
         if (upBlock) {
-            m_blocks.emplace_back(Block(lastMesh.GetPos().m_x + 50.f, 50.f - height, 15.f, height));
+            m_blocks.emplace_back(Block(lastMesh.GetPos().m_x + BlockOffset, halfScreen - height, BlockWidth, height));
         } else {
-            m_blocks.emplace_back(Block(lastMesh.GetPos().m_x + 50.f, -50.f, 15.f, height));
+            m_blocks.emplace_back(Block(lastMesh.GetPos().m_x + BlockOffset, -halfScreen, BlockWidth, height));
         }
 
         upBlock = !upBlock;
@@ -109,12 +114,11 @@ bool Level::IntersectWithPlayer(const gameplay::Player& player) {
             }
         }
 
-        //TODO: Design height from constants
         //Check for floor-ceiling intersections
-        if (playerMesh.GetPos().m_y - playerMesh.GetRadius() <= -50)
+        if (playerMesh.GetPos().m_y - playerMesh.GetRadius() <= -common::ScreenDesignHeight / 2.f)
             return true;
 
-        if (playerMesh.GetPos().m_y + playerMesh.GetRadius() >= 50)
+        if (playerMesh.GetPos().m_y + playerMesh.GetRadius() >= common::ScreenDesignHeight / 2.f)
             return true;
 
     } catch (std::bad_cast&) {

@@ -1,16 +1,18 @@
 #include "Player.h"
+#include "Common.h"
 
 using gameplay::Player;
+using namespace common;
 
-Player::Player() : m_playerMesh(-40, 0, 8, 24) {
+Player::Player() : m_playerMesh(PlayerStartPos.m_x, PlayerStartPos.m_y, PlayerSize, 24) {
 
 }
 
 void Player::Update(float dt) {
     auto currentPos = m_playerMesh.GetPos();
-    currentPos.m_x += 8 * dt;
+    currentPos.m_x += PlayerSpeed * dt;
 
-    m_horizontalSpeed -= 0.5f * dt;
+    m_horizontalSpeed -= PlayerGravity * dt;
     currentPos.m_y += m_horizontalSpeed;
 
     m_playerMesh.SetPos(currentPos);
@@ -32,5 +34,5 @@ const core::Mesh& Player::GetMesh() const {
 }
 
 void Player::Touch() {
-    m_horizontalSpeed = 0.35f;
+    m_horizontalSpeed = PlayerBoostOnTouch;
 }

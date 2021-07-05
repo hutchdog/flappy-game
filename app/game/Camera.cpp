@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Common.h"
 
 using core::Camera;
 using core::Vec2;
@@ -14,8 +15,8 @@ void Camera::SetViewport(Vec2 size) {
 
     float aspectFix = ((float)m_size.m_y / (float)m_size.m_x);
 
-    m_projectionMatrix[0] = 2.f / 100.f * aspectFix;
-    m_projectionMatrix[5] = 2.f / 100.f; //Design height
+    m_projectionMatrix[0] = 2.f / common::ScreenDesignHeight * aspectFix;
+    m_projectionMatrix[5] = 2.f / common::ScreenDesignHeight;
 }
 
 Vec2 Camera::GetViewport() const {

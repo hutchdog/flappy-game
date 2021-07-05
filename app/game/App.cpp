@@ -1,6 +1,7 @@
 #include <jni.h>
 
 #include "App.h"
+#include "Common.h"
 
 using core::App;
 
@@ -62,12 +63,13 @@ void App::Touch() {
 
     if (m_gameplayState == GameplayState::GameOver) {
         ResetGame();
+        m_gameplayState = GameplayState::Play;
         return;
     }
 }
 
 void App::ResetGame() {
-    m_player.GetMesh().SetPos(Vec2(-40, 0));
+    m_player.GetMesh().SetPos(common::PlayerStartPos);
     m_level.Reset();
 
     if (m_renderer) {

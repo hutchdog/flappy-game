@@ -1,11 +1,11 @@
 #include "AndroidRenderer.h"
 #include "Mesh.h"
+#include "Common.h"
 
 #include <android/native_window_jni.h>
 
-#include <string>
-
 using core::AndroidRenderer;
+using common::PlayerSpeed;
 
 AndroidRenderer::AndroidRenderer(JNIEnv* environment, jobject view) : m_environment(environment), m_view(view) {
     DisplayInit();
@@ -93,10 +93,11 @@ void AndroidRenderer::CreateVS() {
     int compileStatus[1];
     glGetShaderiv(m_vertexProgram, GL_COMPILE_STATUS, compileStatus);
 
-    if (compileStatus[0] == 0)
-    {
+    if (compileStatus[0] == 0) {
         glDeleteShader(m_vertexProgram);
         m_vertexProgram = 0;
+
+        assert(false && "Can't compile vertex shader!");
     }
 }
 
@@ -119,10 +120,10 @@ void AndroidRenderer::CreatePS() {
     int compileStatus[1];
     glGetShaderiv(m_fragmentProgram, GL_COMPILE_STATUS, compileStatus);
 
-    if (compileStatus[0] == 0)
-    {
+    if (compileStatus[0] == 0) {
         glDeleteShader(m_fragmentProgram);
         m_fragmentProgram = 0;
+        assert(false && "Can't compile pixel shader!");
     }
 }
 
@@ -136,15 +137,14 @@ void AndroidRenderer::ShaderProgramInit() {
 
         glLinkProgram(m_program);
 
-        // Get the link status.
         int linkStatus[1];
         glGetProgramiv(m_program, GL_LINK_STATUS, linkStatus);
 
-        // If the link failed, delete the program.
         if (linkStatus[0] == 0)
         {
             glDeleteProgram(m_program);
             m_program = 0;
+            assert(false && "Can't link program!");
         }
     }
 
@@ -159,12 +159,12 @@ void AndroidRenderer::ShaderProgramInit() {
 
 void AndroidRenderer::BeginFrame() {
     glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void AndroidRenderer::Update(float dt) {
     auto offset = m_defaultCamera.GetOffset();
-    offset.m_x -= 8.f * dt;
+    offset.m_x -= PlayerSpeed * dt;
     m_defaultCamera.SetOffset(offset);
 }
 

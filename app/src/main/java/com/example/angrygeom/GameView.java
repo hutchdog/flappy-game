@@ -41,7 +41,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
     }
 
     public void update() {
-        //Draw test
         if (m_nativeStarted) {
             applicationDraw();
         }
